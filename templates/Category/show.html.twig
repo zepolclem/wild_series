@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+	<div class="container-fluid">
+
+		<h1>{{category.name}}</h1>
+
+		<ul>
+			{% for program in programs %}
+				<li>
+					<a href="{{ path("program_show", { id: category.id }) }}">
+						{{program.title}}</a>
+				</li>
+			{% else %}
+				<li>
+					No show for this category
+				</li>
+			{% endfor %}
+		</ul>
+		<a href="{{ path('category_index') }}">
+			Back to the categories
+		</a>
+	</div>
+{% endblock %}
