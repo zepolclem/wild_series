@@ -9,7 +9,7 @@
 		<ul>
 			{% for program in programs %}
 				<li>
-					<a href="{{ path("program_show", { id: category.id }) }}">
+					<a href="{{ path("program_show", { id: program.id }) }}">
 						{{program.title}}</a>
 				</li>
 			{% else %}
