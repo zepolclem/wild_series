@@ -14,7 +14,7 @@
 				<h2>{{ loop.index }}
 					/
 					{{ episode.title }}
-					<a href="{{ path("program_episode_show", { program_id: season.program.id, season_id: season.id, episode_id : episode.id }) }}">Voir la fiche</a>
+					<a href="{{ path("program_episode_show", { program_id: season.program.id, season_id: season.id, episode_id : episode.number }) }}">Voir la fiche</a>
 				</h2>
 				{# <p>{{ program.summary }}</p> #}
 				{# Lien vers la fiche de la série : #}
