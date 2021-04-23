@@ -108,4 +108,9 @@ class Actor
 
         return $this;
     }
+
+    public function getDisplayName(): string
+    {
+        return $this->firstname.' '.$this->lastname;
+    }
 }
