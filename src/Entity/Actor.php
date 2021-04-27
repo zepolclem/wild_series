@@ -81,7 +81,6 @@ class Actor
     public function setBirthDate(?\DateTimeInterface $birth_date): self
     {
         $this->birth_date = $birth_date;
-
         return $this;
     }
 
