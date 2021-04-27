@@ -6,7 +6,6 @@
 
 {% block body %}
 
-	<div class="container-fluid">
 		<h1>Toutes les séries de la table program :
 		</h1>
 		{% for program in programs %}
@@ -18,14 +17,17 @@
 					{{ program.category.name }}</h2>
 				<p>{{ program.summary }}</p>
 				{# Lien vers la fiche de la série : #}
-				<a href="{{ path("program_show", { id: program.id }) }}">Voir la fiche</a>
+				<a href="{{ path("program_show", { slug: program.slug }) }}">Voir la fiche</a>
 			</div>
 		{% else %}
 			Aucune série trouvée.
 		{% endfor %}
-
+		<hr>
+		<a href="{{ path('program_new') }}">
+			Add a program
+		</a>
+		<br>
 		<a href="{{ path('app_index') }}">
 			Retour à l'accueil
 		</a>
-	</div>
 {% endblock %}

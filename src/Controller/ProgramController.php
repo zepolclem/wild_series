@@ -6,6 +6,7 @@ use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Form\ProgramType;
+use App\Service\Slugify as ServiceSlugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +37,7 @@ class ProgramController extends AbstractController
     /**
      * @Route("/new", name="new")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, ServiceSlugify $slugify): Response
     {
         // Create a new Program Object
         $program = new Program();
@@ -46,6 +47,8 @@ class ProgramController extends AbstractController
         $form->handleRequest($request);
         // Was the form submitted ?
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugify->generate($program->getTitle());
+            $program->setSlug($slug);
             // Deal with the submitted data
             // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
@@ -63,7 +66,7 @@ class ProgramController extends AbstractController
     /**
      * Getting a program by id.
      *
-     * @Route("/show/{id<^[0-9]+$>}", name="show")
+     * @Route("/{slug<^[a-z]+(?:-[a-z]+)*$>}", name="show")
      */
     public function show(Program $program): Response
     {
@@ -72,7 +75,7 @@ class ProgramController extends AbstractController
         // ->findOneBy(['id' => $id]);
 
         if (!$program) {
-            throw $this->createNotFoundException('No program with found in program\'s table.');
+            throw $this->createNotFoundException('No program with slug : ' . $program->getSlug() . ' found in program\'s table.');
         }
 
         $seasons = $program->getSeasons();
