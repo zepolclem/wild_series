@@ -32,6 +32,7 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
                 $season->setYear(rand(2000, 2021));
                 $season->setProgram($this->getReference('program_'.$title));
                 $manager->persist($season);
+                
                 for ($j = 1; $j < rand(4, 20); ++$j) {
                     $episode = new Episode();
                     $episode->setNumber($j);

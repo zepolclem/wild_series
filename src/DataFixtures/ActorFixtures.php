@@ -70,7 +70,6 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             $actor->addProgram($this->getReference('program_'.self::PROGRAMS[random_int(1, 5)]));
             $manager->persist($actor);
         }
-
         $manager->flush();
     }
 
