@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Service;
+
 class Mailer
 {
     // ...
@@ -11,8 +13,8 @@ class Mailer
         $this->adminEmail = $adminEmail;
     }
 
-    public function sendMail(): bool
-    {
-        // ...
-    }
+    // public function sendMail(): bool
+    // {
+    //     // ...
+    // }
 }

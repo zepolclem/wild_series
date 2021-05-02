@@ -10,4 +10,16 @@
 	<h2>{{program.title}}</h2>
 	<p>{{episode.synopsis}}</p>
 
+	{% for comment in episode.comments|reverse %}
+		toto
+		<p>{{comment.comment}}</p>
+	{% endfor %}
+
+	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		<span>Comment as
+			{{app.user.email}}</span>
+		{{ include('comment/_form.html.twig') }}
+	{% endif %}
+
+
 {% endblock %}

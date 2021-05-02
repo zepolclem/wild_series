@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
+use App\Form\CommentType;
 use App\Form\ProgramType;
 use App\Service\Slugify as ServiceSlugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -75,7 +77,7 @@ class ProgramController extends AbstractController
         // ->findOneBy(['id' => $id]);
 
         if (!$program) {
-            throw $this->createNotFoundException('No program with slug : ' . $program->getSlug() . ' found in program\'s table.');
+            throw $this->createNotFoundException('No program with slug : '.$program->getSlug().' found in program\'s table.');
         }
 
         $seasons = $program->getSeasons();
@@ -114,15 +116,40 @@ class ProgramController extends AbstractController
      * @Route("/{program_id}/seasons/{season_id}/episodes/{episode_id}", name="episode_show")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program_id": "id"}})
      */
-    public function showEpisode(Program $program, int $season_id, int $episode_id)
+    public function showEpisode(Request $request, Program $program, int $season_id, int $episode_id)
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+        // Was the form submitted ?
+
         $season = $this->getDoctrine()->getRepository(Season::class)->findOneBy(['program' => $program->getId(), 'number' => $season_id]);
         $episode = $this->getDoctrine()->getRepository(Episode::class)->findOneBy(['season' => $season->getId(), 'number' => $episode_id]);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setEpisode($episode);
+            $comment->setUser($this->getUser());
+            // Deal with the submitted data
+            // Get the Entity Manager
+            $entityManager = $this->getDoctrine()->getManager();
+            // Persist Program Object
+            $entityManager->persist($comment);
+            // Flush the persisted object
+            $entityManager->flush();
+            // Finally redirect to categories list
+            return $this->redirectToRoute('program_episode_show', [
+                'program_id' => $program->getId(),
+                'season_id' => $season_id,
+                'episode_id' => $episode_id,
+                ]);
+        }
 
         return $this->render('program/episode_show.html.twig', [
             'program' => $program,
             'season' => $season,
             'episode' => $episode,
+            'form' => $form->createView(),
         ]);
     }
 }
