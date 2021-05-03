@@ -54,6 +54,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setTitle($title);
             $program->setSummary($data['summary']);
             $program->setCategory($this->getReference($data['category']));
+            $program->setOwner($this->getReference('user_contrib'));
             $this->addReference('program_'.$title, $program);
             $manager->persist($program);
         }
@@ -62,6 +63,9 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-        return [CategoryFixtures::class];
+        return [
+            CategoryFixtures::class,
+            UserFixtures::class,
+        ];
     }
 }

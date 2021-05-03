@@ -13,9 +13,13 @@
 	{% for comment in episode.comments|reverse %}
 		toto
 		<p>{{comment.comment}}</p>
+		{% if is_granted("ROLE_ADMIN") or comment.user == app.user  %}
+			<a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer da comment</a>
+		{% endif %}
+		<hr>
 	{% endfor %}
 
-	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+	{% if is_granted('ROLE_CONTRIBUTOR') %}
 		<span>Comment as
 			{{app.user.email}}</span>
 		{{ include('comment/_form.html.twig') }}
