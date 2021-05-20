@@ -20,8 +20,18 @@
 			{% include "_navbar.html.twig" %}
 		</header>
 
-		<div class="container-fluid"> {% block body %}{% endblock %}
+		<div class="container">
+			{% for category, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ category }}">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endfor %}
+		</div>
 
+		<div class="container-fluid"> {% block body %}{% endblock %}
 			</div>
 		</body>
 	</html>
+</body></html>

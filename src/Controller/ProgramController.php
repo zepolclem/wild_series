@@ -9,6 +9,7 @@ use App\Entity\Season;
 use App\Form\CommentType;
 use App\Form\ProgramType;
 use App\Service\Slugify as ServiceSlugify;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
@@ -63,6 +64,7 @@ class ProgramController extends AbstractController
             $entityManager->persist($program);
             // Flush the persisted object
             $entityManager->flush();
+            $this->addFlash('success', 'The new program has been created');
 
             $email = (new Email())
                 ->from($this->getParameter('mailer_from'))
@@ -122,6 +124,8 @@ class ProgramController extends AbstractController
         }
 
         $seasons = $program->getSeasons();
+
+        // dd($this->getUser()->isInWatchlist($program));
 
         return $this->render('program/show.html.twig', [
             'program' => $program,
@@ -191,6 +195,24 @@ class ProgramController extends AbstractController
             'season' => $season,
             'episode' => $episode,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/watchlist", name="watchlist", methods={"GET","POST"})
+     */
+    public function addToWatchlist( Program $program, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->getUser()->getPrograms()->contains($program)) {
+            $this->getUser()->removeProgram($program);
+        } else {
+            $this->getUser()->addProgram($program);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('program_show', [
+            'slug' => $program->getSlug(),
         ]);
     }
 }

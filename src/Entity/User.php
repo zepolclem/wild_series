@@ -46,10 +46,16 @@ class User implements UserInterface
      */
     private $programs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Program::class)
+     */
+    private $watchlists;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->programs = new ArrayCollection();
+        $this->watchlists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,5 +197,16 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function isInWatchlist(Program $program)
+    {        
+        foreach ($this->getPrograms() as $watchedProgram) {
+            if ($program->getId() === $watchedProgram->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
