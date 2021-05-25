@@ -37,6 +37,18 @@
 				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
+			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+				<span>
+					Email:
+					{{ app.user.email }}
+				</span>
+				<a href="{{path("app_logout")}}">Logout</a>
+			{% else %}
+				<span>
+					<a href="{{path("app_login")}}">Login</a>
+				</span>
+			{% endif %}
+
 		</div>
 	</div>
 </nav>

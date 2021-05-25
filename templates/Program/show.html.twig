@@ -11,9 +11,12 @@
 			<h1 class="mt-0">{{ program.title }}</h1>
 			<p>{{ program.summary }}</p>
 			{% if app.user %}
-				<a id="watchlist" href="{{ path('program_watchlist', {id: program.id})}}">
+				<a href="{{ path('program_watchlist', {id: program.id})}}">
 					<i class="{{ app.user.isInWatchlist(program) ? 'fas' : 'far' }} fa-heart"></i>
 				</a>
+				{# <a id="watchlist" href="{{ path('program_watchlist', {id: program.id})}}">
+									<i class="{{ app.user.isInWatchlist(program) ? 'fas' : 'far' }} fa-heart"></i>
+								</a> #}
 			{% endif %}
 			<p>
 				Catégorie :

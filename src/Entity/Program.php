@@ -60,6 +60,11 @@ class Program
     private $actors;
 
     /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="watchlist")
+     */
+    private $viewers;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $slug;
